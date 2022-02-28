@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wzl.mapper.TypeMapper">
+
+    <select id="getTypeById" parameterType="int" resultType="com.wzl.entity.Type">
+        select typename from t_type where type_id = #{id}
+    </select>
+
+
+    <select id="getTypes" resultType="com.wzl.entity.Type">
+        select * from t_type
+    </select>
+
+</mapper>

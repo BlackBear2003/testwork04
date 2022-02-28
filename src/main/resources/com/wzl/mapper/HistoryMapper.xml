@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wzl.mapper.HistoryMapper">
+
+    <insert id="addToHistory" parameterType="int">
+        insert into t_history (uid,book_id)
+        values (#{uid},#{book_id})
+    </insert>
+
+
+    <select id="getHistory" resultType="com.wzl.entity.Book">
+        select a.* from t_book a
+                            inner join t_history b on a.book_id=b.book_id
+                            inner join t_book_statu c on a.book_id=c.book_id
+        where b.uid=#{uid} and c.statu_id=2 LIMIT 0, 5
+    </select>
+
+</mapper>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wzl.mapper.ResourceMapper">
+
+    <insert id="addResource" >
+        insert into t_book_resouce (book_id,filename)
+        values (#{book_id},#{filename})
+    </insert>
+
+    <delete id="deleteResource" >
+        delete from t_book_resouce where book_id=#{book_id} and filename=#{filename}
+    </delete>
+
+    <select id="getResource" parameterType="int" resultType="string">
+        select filename from t_book_resource where book_id = #{book_id}
+    </select>
+
+    <update id="updateResource" >
+        update  t_book_resouce set filename=#{filename} where book_id=#{book_id}
+    </update>
+
+</mapper>

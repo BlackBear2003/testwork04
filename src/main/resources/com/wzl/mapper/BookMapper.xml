@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wzl.mapper.BookMapper">
+
+    <select id="getBookById" parameterType="int" resultType="com.wzl.entity.Book">
+        select * from t_book where book_id = #{id} in
+                                   (select book_id from t_book_statu where statu_id = 2)
+    </select>
+
+    <select id="getBooksByBookname" parameterType="string"
+            resultType="com.wzl.entity.Book">
+        select * from t_book where bookname like '%${value}%' and book_id in
+                                                                  (select book_id from t_book_statu where statu_id = 2)
+    </select>
+
+    <update id="updateBook" parameterType="com.wzl.entity.Book">
+        update t_book set bookname=#{bookname},author=#{author},description=#{description},image=#{image},click_time=#{clicktime} where book_id=#{id}
+    </update>
+
+    <delete id="deleteBook" parameterType="int">
+        delete from t_book where book_id = #{id}
+    </delete>
+
+    <insert id="addBook" parameterType="com.wzl.entity.Book"
+            useGeneratedKeys="true" keyProperty="book_id">
+        <!-- keyColumn：要获得哪个列的值
+             keyProperty:查询出来的主键值封装给JavaBean的那个属性
+             order：取值为before，当前SQL在插入SQL之前运行。取值为after，当前SQL在插入SQL之后运行
+             resultType：查出的数据的返回值类型 -->
+        <selectKey keyColumn="book_id" keyProperty="id" resultType="int" order="AFTER">
+            select last_insert_id();
+        </selectKey>
+
+        insert into t_book(bookname,author,description,image,click_time)
+        values(#{bookname},#{author},#{description},#{image},#{clicktime})
+    </insert>
+
+    <select id="getBookIsByType" parameterType="int"
+            resultType="com.wzl.entity.Book">
+        select a.* from t_book a
+                            inner join t_book_type b on a.book_id=b.book_id
+                            inner join t_book_statu c on a.book_id=c.book_id
+        where b.type_id=#{type_id} and c.statu_id=2
+    </select>
+
+    <select id="getBooks"
+            resultType="com.wzl.entity.Book">
+        select * from t_book
+        where book_id in
+              (select book_id from t_book_statu where statu_id = 2)
+    </select>
+
+    <update id="addClicktime" parameterType="int">
+        update t_book set click_time=click_time + 1  where book_id=#{id}
+    </update>
+
+    <select id="getRank" resultType="com.wzl.entity.Book">
+        select * from t_book order by click_time desc LIMIT 0, 3
+    </select>
+
+
+
+
+</mapper>

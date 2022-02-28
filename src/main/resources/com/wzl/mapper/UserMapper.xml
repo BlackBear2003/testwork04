@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wzl.mapper.UserMapper">
+
+    <select id="getUserById" parameterType="int" resultType="com.wzl.entity.User">
+        select * from t_user where uid = #{id}
+    </select>
+
+    <select id="getUsersByUsername" parameterType="string"
+            resultType="com.wzl.entity.User">
+        select * from t_user where username like '%${value}%'
+    </select>
+
+    <update id="updateUser" parameterType="com.wzl.entity.User">
+        update t_user set username=#{username},password=#{password} where uid=#{id}
+    </update>
+
+    <delete id="deleteUser" parameterType="int">
+        delete from t_user where uid = #{id}
+    </delete>
+
+    <insert id="addUser" parameterType="com.wzl.entity.User"
+            useGeneratedKeys="true" keyProperty="uid">
+        <!-- keyColumn：要获得哪个列的值
+             keyProperty:查询出来的主键值封装给JavaBean的那个属性
+             order：取值为before，当前SQL在插入SQL之前运行。取值为after，当前SQL在插入SQL之后运行
+             resultType：查出的数据的返回值类型 -->
+        <selectKey keyColumn="uid" keyProperty="id" resultType="int" order="AFTER">
+            select last_insert_id();
+        </selectKey>
+        insert into t_user(username,password)
+        values(#{username},#{password})
+    </insert>
+
+
+    <select id="getUserRoleById" parameterType="int" resultType="int">
+        select role_id from t_user_role where uid = #{id}
+    </select>
+
+
+
+</mapper>
